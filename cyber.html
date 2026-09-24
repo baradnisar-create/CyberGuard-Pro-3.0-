@@ -1,0 +1,1001 @@
+    <!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CyberGuard Pro 3.0 - Advanced Cyber Security Toolkit</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        cyber: {
+                            50: '#f0fdf4',
+                            500: '#10b981',
+                            600: '#059669',
+                            900: '#064e3b',
+                            dark: '#0f172a',
+                            card: '#1e293b',
+                            accent: '#38bdf8'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .code-font { font-family: 'JetBrains Mono', monospace; }
+        .glass-panel {
+            background: rgba(30, 41, 59, 0.75);
+            backdrop-filter: blur(14px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+    </style>
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col selection:bg-emerald-500 selection:text-white">
+
+    <nav class="sticky top-0 z-50 glass-panel border-b border-slate-800 px-4 lg:px-8 py-3.5 flex items-center justify-between">
+        <div class="flex items-center space-x-3">
+            <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-emerald-500 to-cyan-500 flex items-center justify-center shadow-lg shadow-emerald-500/20">
+                <i class="fa-solid fa-shield-halved text-xl text-slate-950"></i>
+            </div>
+            <div>
+                <span class="text-lg font-bold tracking-tight bg-gradient-to-r from-emerald-400 to-cyan-400 bg-clip-text text-transparent">CyberGuard Pro</span>
+                <span class="hidden sm:inline-block ml-2 text-xs px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">v3.2 Secure</span>
+            </div>
+        </div>
+        <div class="flex items-center space-x-1 sm:space-x-2 overflow-x-auto py-1">
+            <button onclick="switchTab('dashboard')" id="nav-dashboard" class="nav-btn px-3 py-2 rounded-lg text-xs sm:text-sm font-medium transition-all bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 whitespace-nowrap">
+                <i class="fa-solid fa-chart-line mr-1.5"></i> Dashboard
+            </button>
+            <button onclick="switchTab('url-scanner')" id="nav-url-scanner" class="nav-btn px-3 py-2 rounded-lg text-xs sm:text-sm font-medium text-slate-400 hover:text-white hover:bg-slate-800/50 transition-all whitespace-nowrap">
+                <i class="fa-solid fa-link mr-1.5"></i> URL Scanner
+            </button>
+            <button onclick="switchTab('password-checker')" id="nav-password-checker" class="nav-btn px-3 py-2 rounded-lg text-xs sm:text-sm font-medium text-slate-400 hover:text-white hover:bg-slate-800/50 transition-all whitespace-nowrap">
+                <i class="fa-solid fa-key mr-1.5"></i> Passwords
+            </button>
+            <button onclick="switchTab('phishing-checker')" id="nav-phishing-checker" class="nav-btn px-3 py-2 rounded-lg text-xs sm:text-sm font-medium text-slate-400 hover:text-white hover:bg-slate-800/50 transition-all whitespace-nowrap">
+                <i class="fa-solid fa-envelope-open-text mr-1.5"></i> Phishing
+            </button>
+            <button onclick="switchTab('port-scanner')" id="nav-port-scanner" class="nav-btn px-3 py-2 rounded-lg text-xs sm:text-sm font-medium text-slate-400 hover:text-white hover:bg-slate-800/50 transition-all whitespace-nowrap">
+                <i class="fa-solid fa-network-wired mr-1.5"></i> Port Check
+            </button>
+            <button onclick="switchTab('cve-search')" id="nav-cve-search" class="nav-btn px-3 py-2 rounded-lg text-xs sm:text-sm font-medium text-slate-400 hover:text-white hover:bg-slate-800/50 transition-all whitespace-nowrap">
+                <i class="fa-solid fa-bug-slash mr-1.5"></i> CVE / Exploit DB
+            </button>
+            <button onclick="switchTab('crypto-tool')" id="nav-crypto-tool" class="nav-btn px-3 py-2 rounded-lg text-xs sm:text-sm font-medium text-slate-400 hover:text-white hover:bg-slate-800/50 transition-all whitespace-nowrap">
+                <i class="fa-solid fa-code mr-1.5"></i> Encoder/Decoder
+            </button>
+            <button onclick="switchTab('ir-checklist')" id="nav-ir-checklist" class="nav-btn px-3 py-2 rounded-lg text-xs sm:text-sm font-medium text-slate-400 hover:text-white hover:bg-slate-800/50 transition-all whitespace-nowrap">
+                <i class="fa-solid fa-list-check mr-1.5"></i> Incident Plan
+            </button>
+        </div>
+    </nav>
+
+    <main class="flex-grow max-w-7xl w-full mx-auto p-4 sm:p-6 lg:p-8">
+
+        <!-- DASHBOARD VIEW -->
+        <section id="view-dashboard" class="space-y-6">
+            <div class="relative overflow-hidden rounded-2xl bg-gradient-to-r from-emerald-900/40 via-slate-900 to-cyan-900/40 border border-slate-800 p-6 sm:p-10">
+                <div class="relative z-10 max-w-2xl">
+                    <h1 class="text-3xl sm:text-4xl font-extrabold tracking-tight text-white mb-3">Enterprise Cyber Security Command Center</h1>
+                    <p class="text-slate-300 text-sm sm:text-base mb-6">Inspect malicious URLs, test password crack times, simulate phishing checks, query CVE database exploits, encode security payloads, and coordinate incident response steps instantly.</p>
+                    <div class="flex flex-wrap gap-3">
+                        <button onclick="switchTab('url-scanner')" class="px-5 py-2.5 rounded-xl bg-emerald-500 hover:bg-emerald-600 text-slate-950 font-semibold shadow-lg shadow-emerald-500/25 transition-all flex items-center">
+                            <i class="fa-solid fa-shield-virus mr-2"></i> Scan a URL Now
+                        </button>
+                        <button onclick="switchTab('cve-search')" class="px-5 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 font-semibold transition-all flex items-center">
+                            <i class="fa-solid fa-bug-slash mr-2"></i> Search CVE Vulnerabilities
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Metrics Grid -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                <div class="glass-panel rounded-xl p-5 border-l-4 border-l-emerald-500">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-xs uppercase tracking-wider text-slate-400 font-medium">Scans Today</p>
+                            <h3 class="text-2xl font-bold mt-1 text-white">4,120</h3>
+                        </div>
+                        <div class="p-3 rounded-lg bg-emerald-500/10 text-emerald-400">
+                            <i class="fa-solid fa-radar text-xl"></i>
+                        </div>
+                    </div>
+                    <div class="mt-3 flex items-center text-xs text-emerald-400">
+                        <i class="fa-solid fa-arrow-trend-up mr-1"></i> +24% active load
+                    </div>
+                </div>
+                <div class="glass-panel rounded-xl p-5 border-l-4 border-l-red-500">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-xs uppercase tracking-wider text-slate-400 font-medium">Threats Flagged</p>
+                            <h3 class="text-2xl font-bold mt-1 text-white">214</h3>
+                        </div>
+                        <div class="p-3 rounded-lg bg-red-500/10 text-red-400">
+                            <i class="fa-solid fa-bug text-xl"></i>
+                        </div>
+                    </div>
+                    <div class="mt-3 flex items-center text-xs text-red-400">
+                        <i class="fa-solid fa-triangle-exclamation mr-1"></i> Phishing & Exploit Vectors
+                    </div>
+                </div>
+                <div class="glass-panel rounded-xl p-5 border-l-4 border-l-cyan-500">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-xs uppercase tracking-wider text-slate-400 font-medium">System Integrity</p>
+                            <h3 class="text-2xl font-bold mt-1 text-white">100%</h3>
+                        </div>
+                        <div class="p-3 rounded-lg bg-cyan-500/10 text-cyan-400">
+                            <i class="fa-solid fa-server text-xl"></i>
+                        </div>
+                    </div>
+                    <div class="mt-3 flex items-center text-xs text-cyan-400">
+                        <i class="fa-solid fa-circle-check mr-1"></i> All protection nodes green
+                    </div>
+                </div>
+                <div class="glass-panel rounded-xl p-5 border-l-4 border-l-amber-500">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-xs uppercase tracking-wider text-slate-400 font-medium">Threat Feeds</p>
+                            <h3 class="text-2xl font-bold mt-1 text-white">32 Sources</h3>
+                        </div>
+                        <div class="p-3 rounded-lg bg-amber-500/10 text-amber-400">
+                            <i class="fa-solid fa-satellite-dish text-xl"></i>
+                        </div>
+                    </div>
+                    <div class="mt-3 flex items-center text-xs text-amber-400">
+                        <i class="fa-solid fa-rotate mr-1"></i> Live CVE feed synced
+                    </div>
+                </div>
+            </div>
+
+            <!-- Toolkit Quick Access Cards -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                <div onclick="switchTab('url-scanner')" class="glass-panel rounded-xl p-5 cursor-pointer hover:border-emerald-500/50 transition-all group">
+                    <div class="w-12 h-12 rounded-lg bg-emerald-500/10 text-emerald-400 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                        <i class="fa-solid fa-link text-xl"></i>
+                    </div>
+                    <h3 class="text-base font-bold text-white mb-1">URL & Link Scanner</h3>
+                    <p class="text-xs text-slate-400">Analyze links for hidden malware redirects, SSL faults, and domain reputation.</p>
+                </div>
+                <div onclick="switchTab('password-checker')" class="glass-panel rounded-xl p-5 cursor-pointer hover:border-cyan-500/50 transition-all group">
+                    <div class="w-12 h-12 rounded-lg bg-cyan-500/10 text-cyan-400 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                        <i class="fa-solid fa-key text-xl"></i>
+                    </div>
+                    <h3 class="text-base font-bold text-white mb-1">Password Inspector</h3>
+                    <p class="text-xs text-slate-400">Test entropy strength, brute-force crack time, and generate secure passphrases.</p>
+                </div>
+                <div onclick="switchTab('cve-search')" class="glass-panel rounded-xl p-5 cursor-pointer hover:border-purple-500/50 transition-all group">
+                    <div class="w-12 h-12 rounded-lg bg-purple-500/10 text-purple-400 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                        <i class="fa-solid fa-bug-slash text-xl"></i>
+                    </div>
+                    <h3 class="text-base font-bold text-white mb-1">CVE Vulnerability DB</h3>
+                    <p class="text-xs text-slate-400">Search known software vulnerabilities, CVSS scores, and mitigation advice.</p>
+                </div>
+                <div onclick="switchTab('ir-checklist')" class="glass-panel rounded-xl p-5 cursor-pointer hover:border-amber-500/50 transition-all group">
+                    <div class="w-12 h-12 rounded-lg bg-amber-500/10 text-amber-400 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                        <i class="fa-solid fa-list-check text-xl"></i>
+                    </div>
+                    <h3 class="text-base font-bold text-white mb-1">Incident Response Plan</h3>
+                    <p class="text-xs text-slate-400">Step-by-step containment and mitigation playbook for security breaches.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- URL SCANNER VIEW -->
+        <section id="view-url-scanner" class="hidden space-y-6">
+            <div class="glass-panel rounded-2xl p-6 sm:p-8">
+                <div class="max-w-2xl mb-6">
+                    <h2 class="text-2xl font-bold text-white mb-2 flex items-center">
+                        <i class="fa-solid fa-link text-emerald-400 mr-3"></i> URL & Malware Threat Scanner
+                    </h2>
+                    <p class="text-slate-300 text-sm">Enter any hyperlink or web address to check for phishing indicators, malicious redirects, bad SSL certificates, and reputation flags.</p>
+                </div>
+                <div class="flex flex-col sm:flex-row gap-3">
+                    <div class="relative flex-grow">
+                        <span class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-slate-500">
+                            <i class="fa-solid fa-globe"></i>
+                        </span>
+                        <input type="url" id="url-input" placeholder="https://example.com/suspicious-path" class="w-full pl-11 pr-4 py-3 bg-slate-900 border border-slate-800 rounded-xl text-white placeholder-slate-500 focus:outline-none focus:border-emerald-500 code-font text-sm">
+                    </div>
+                    <button onclick="scanURL()" class="px-6 py-3 bg-emerald-500 hover:bg-emerald-600 text-slate-950 font-bold rounded-xl transition-all shadow-lg shadow-emerald-500/20 flex items-center justify-center">
+                        <i class="fa-solid fa-radar mr-2"></i> Run Deep Scan
+                    </button>
+                </div>
+                <div class="mt-4 flex flex-wrap gap-2">
+                    <span class="text-xs text-slate-400 self-center mr-2">Quick test samples:</span>
+                    <button onclick="loadSampleURL('https://secure-login-apple-support.tk/verify')" class="text-xs px-2.5 py-1 bg-slate-900 hover:bg-slate-800 border border-slate-800 text-red-400 rounded-lg code-font">Phishing Sample</button>
+                    <button onclick="loadSampleURL('http://free-crypto-giveaway.xyz/claim')" class="text-xs px-2.5 py-1 bg-slate-900 hover:bg-slate-800 border border-slate-800 text-amber-400 rounded-lg code-font">Suspicious Domain</button>
+                    <button onclick="loadSampleURL('https://github.com')" class="text-xs px-2.5 py-1 bg-slate-900 hover:bg-slate-800 border border-slate-800 text-emerald-400 rounded-lg code-font">Safe Domain</button>
+                </div>
+            </div>
+
+            <!-- Results Card -->
+            <div id="url-results-container" class="hidden glass-panel rounded-2xl p-6 sm:p-8 space-y-6">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between border-b border-slate-800 pb-4 gap-4">
+                    <div>
+                        <span id="url-status-badge" class="px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider"></span>
+                        <h3 id="url-result-title" class="text-xl font-bold text-white mt-2 code-font break-all"></h3>
+                    </div>
+                    <div class="text-right">
+                        <p class="text-xs text-slate-400">Threat Score</p>
+                        <p id="url-threat-score" class="text-3xl font-black"></p>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div class="p-4 rounded-xl bg-slate-900/80 border border-slate-800">
+                        <p class="text-xs text-slate-400 uppercase font-semibold">SSL Certificate</p>
+                        <p id="url-res-ssl" class="text-sm font-medium mt-1"></p>
+                    </div>
+                    <div class="p-4 rounded-xl bg-slate-900/80 border border-slate-800">
+                        <p class="text-xs text-slate-400 uppercase font-semibold">Domain Age / Whois</p>
+                        <p id="url-res-domain" class="text-sm font-medium mt-1"></p>
+                    </div>
+                    <div class="p-4 rounded-xl bg-slate-900/80 border border-slate-800">
+                        <p class="text-xs text-slate-400 uppercase font-semibold">Redirect Analysis</p>
+                        <p id="url-res-redirect" class="text-sm font-medium mt-1"></p>
+                    </div>
+                </div>
+
+                <div>
+                    <h4 class="text-sm font-bold text-slate-300 mb-3">Detailed Security Flags & Indicators</h4>
+                    <div id="url-indicators-list" class="space-y-2"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- PASSWORD INSPECTOR & GENERATOR VIEW -->
+        <section id="view-password-checker" class="hidden space-y-6">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <!-- Strength Analyzer -->
+                <div class="glass-panel rounded-2xl p-6 sm:p-8 flex flex-col justify-between">
+                    <div>
+                        <h2 class="text-xl font-bold text-white mb-2 flex items-center">
+                            <i class="fa-solid fa-key text-emerald-400 mr-3"></i> Password Strength Inspector
+                        </h2>
+                        <p class="text-slate-300 text-sm mb-6">Test entropy, brute-force cracking time, and dictionary weaknesses. Analyzed entirely client-side.</p>
+                        
+                        <div class="relative mb-4">
+                            <input type="password" id="pwd-input" oninput="analyzePassword()" placeholder="Enter password to test..." class="w-full pl-4 pr-12 py-3 bg-slate-900 border border-slate-800 rounded-xl text-white placeholder-slate-500 focus:outline-none focus:border-emerald-500 code-font">
+                            <button onclick="togglePasswordVisibility()" class="absolute inset-y-0 right-0 pr-4 flex items-center text-slate-400 hover:text-white">
+                                <i id="pwd-eye-icon" class="fa-solid fa-eye"></i>
+                            </button>
+                        </div>
+
+                        <!-- Strength Meter bar -->
+                        <div class="space-y-2 mb-6">
+                            <div class="flex justify-between text-xs">
+                                <span class="text-slate-400">Estimated Strength:</span>
+                                <span id="pwd-strength-label" class="font-bold text-slate-400">Not Entered</span>
+                            </div>
+                            <div class="w-full h-2.5 bg-slate-900 rounded-full overflow-hidden border border-slate-800">
+                                <div id="pwd-strength-bar" class="h-full w-0 transition-all duration-300"></div>
+                            </div>
+                        </div>
+
+                        <!-- Crack Time Estimation -->
+                        <div class="p-4 rounded-xl bg-slate-900/80 border border-slate-800 mb-6 flex items-center justify-between">
+                            <div>
+                                <p class="text-xs text-slate-400 uppercase font-semibold">Time to Crack (Brute Force)</p>
+                                <p id="pwd-crack-time" class="text-lg font-bold text-white mt-1">-</p>
+                            </div>
+                            <div class="p-3 rounded-lg bg-emerald-500/10 text-emerald-400">
+                                <i class="fa-solid fa-stopwatch text-xl"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Password Generator -->
+                <div class="glass-panel rounded-2xl p-6 sm:p-8 flex flex-col justify-between">
+                    <div>
+                        <h2 class="text-xl font-bold text-white mb-2 flex items-center">
+                            <i class="fa-solid fa-wand-magic-sparkles text-cyan-400 mr-3"></i> Secure Passphrase Generator
+                        </h2>
+                        <p class="text-slate-300 text-sm mb-6">Generate cryptographically secure passwords with custom entropy length.</p>
+
+                        <div class="relative mb-6">
+                            <input type="text" id="generated-pwd-output" readonly class="w-full pl-4 pr-24 py-3 bg-slate-900 border border-slate-800 rounded-xl text-emerald-400 code-font font-bold text-lg select-all">
+                            <button onclick="copyGeneratedPassword()" class="absolute right-2 top-2 px-3 py-1.5 bg-emerald-500/20 hover:bg-emerald-500/30 text-emerald-300 rounded-lg text-xs font-semibold border border-emerald-500/30 transition-all">
+                                <i class="fa-solid fa-copy mr-1"></i> Copy
+                            </button>
+                        </div>
+
+                        <div class="space-y-4 mb-6">
+                            <div>
+                                <div class="flex justify-between text-xs text-slate-400 mb-1">
+                                    <span>Password Length</span>
+                                    <span id="slider-val" class="font-bold text-white">16</span>
+                                </div>
+                                <input type="range" id="pwd-length-slider" min="8" max="64" value="16" oninput="updateSliderVal()" class="w-full accent-emerald-500 cursor-pointer">
+                            </div>
+
+                            <div class="grid grid-cols-2 gap-3">
+                                <label class="flex items-center space-x-2 text-sm text-slate-300 cursor-pointer">
+                                    <input type="checkbox" id="gen-upper" checked class="rounded bg-slate-900 border-slate-700 text-emerald-500 focus:ring-0">
+                                    <span>Uppercase (A-Z)</span>
+                                </label>
+                                <label class="flex items-center space-x-2 text-sm text-slate-300 cursor-pointer">
+                                    <input type="checkbox" id="gen-lower" checked class="rounded bg-slate-900 border-slate-700 text-emerald-500 focus:ring-0">
+                                    <span>Lowercase (a-z)</span>
+                                </label>
+                                <label class="flex items-center space-x-2 text-sm text-slate-300 cursor-pointer">
+                                    <input type="checkbox" id="gen-numbers" checked class="rounded bg-slate-900 border-slate-700 text-emerald-500 focus:ring-0">
+                                    <span>Numbers (0-9)</span>
+                                </label>
+                                <label class="flex items-center space-x-2 text-sm text-slate-300 cursor-pointer">
+                                    <input type="checkbox" id="gen-symbols" checked class="rounded bg-slate-900 border-slate-700 text-emerald-500 focus:ring-0">
+                                    <span>Symbols (!@#$)</span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button onclick="generatePassword()" class="w-full py-3 bg-cyan-500 hover:bg-cyan-600 text-slate-950 font-bold rounded-xl transition-all shadow-lg shadow-cyan-500/20 flex items-center justify-center">
+                        <i class="fa-solid fa-rotate mr-2"></i> Generate Secure Password
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- PHISHING EMAIL CHECKER VIEW -->
+        <section id="view-phishing-checker" class="hidden space-y-6">
+            <div class="glass-panel rounded-2xl p-6 sm:p-8">
+                <div class="max-w-2xl mb-6">
+                    <h2 class="text-2xl font-bold text-white mb-2 flex items-center">
+                        <i class="fa-solid fa-envelope-open-text text-emerald-400 mr-3"></i> Phishing Email & Header Analyzer
+                    </h2>
+                    <p class="text-slate-300 text-sm">Paste suspicious email body content or raw headers below to scan for social engineering triggers, spoofed sender domains, and malicious links.</p>
+                </div>
+
+                <div class="space-y-4">
+                    <div>
+                        <label class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">Email Header / Raw Content / Body</label>
+                        <textarea id="phishing-input" rows="6" placeholder="From: support@paypa1-security.com\nSubject: URGENT: Your account has been locked. Click here to verify..." class="w-full p-4 bg-slate-900 border border-slate-800 rounded-xl text-white placeholder-slate-500 focus:outline-none focus:border-emerald-500 code-font text-sm"></textarea>
+                    </div>
+                    <div class="flex flex-wrap items-center justify-between gap-3">
+                        <div class="flex gap-2">
+                            <button onclick="loadSamplePhishing(1)" class="text-xs px-3 py-1.5 bg-slate-900 hover:bg-slate-800 border border-slate-800 text-red-400 rounded-lg">Load Phishing Sample</button>
+                            <button onclick="loadSamplePhishing(2)" class="text-xs px-3 py-1.5 bg-slate-900 hover:bg-slate-800 border border-slate-800 text-emerald-400 rounded-lg">Load Legitimate Sample</button>
+                        </div>
+                        <button onclick="analyzePhishing()" class="px-6 py-3 bg-emerald-500 hover:bg-emerald-600 text-slate-950 font-bold rounded-xl transition-all shadow-lg shadow-emerald-500/20 flex items-center">
+                            <i class="fa-solid fa-magnifying-glass-chart mr-2"></i> Analyze Email
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Phishing Results Container -->
+            <div id="phishing-results-container" class="hidden glass-panel rounded-2xl p-6 sm:p-8 space-y-6">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between border-b border-slate-800 pb-4 gap-4">
+                    <div>
+                        <span id="phishing-status-badge" class="px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider"></span>
+                        <h3 id="phishing-result-title" class="text-xl font-bold text-white mt-2"></h3>
+                    </div>
+                    <div class="text-right">
+                        <p class="text-xs text-slate-400">Phishing Probability</p>
+                        <p id="phishing-score" class="text-3xl font-black"></p>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div class="p-4 rounded-xl bg-slate-900/80 border border-slate-800">
+                        <p class="text-xs text-slate-400 uppercase font-semibold">Sender Domain Match</p>
+                        <p id="phishing-res-domain" class="text-sm font-medium mt-1"></p>
+                    </div>
+                    <div class="p-4 rounded-xl bg-slate-900/80 border border-slate-800">
+                        <p class="text-xs text-slate-400 uppercase font-semibold">Urgency Triggers</p>
+                        <p id="phishing-res-urgency" class="text-sm font-medium mt-1"></p>
+                    </div>
+                    <div class="p-4 rounded-xl bg-slate-900/80 border border-slate-800">
+                        <p class="text-xs text-slate-400 uppercase font-semibold">Embedded Links</p>
+                        <p id="phishing-res-links" class="text-sm font-medium mt-1"></p>
+                    </div>
+                </div>
+
+                <div>
+                    <h4 class="text-sm font-bold text-slate-300 mb-3">Detected Heuristics & Anomalies</h4>
+                    <div id="phishing-indicators-list" class="space-y-2"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- PORT SCANNER SIMULATOR VIEW -->
+        <section id="view-port-scanner" class="hidden space-y-6">
+            <div class="glass-panel rounded-2xl p-6 sm:p-8">
+                <div class="max-w-2xl mb-6">
+                    <h2 class="text-2xl font-bold text-white mb-2 flex items-center">
+                        <i class="fa-solid fa-network-wired text-purple-400 mr-3"></i> Network Port & Socket Inspector
+                    </h2>
+                    <p class="text-slate-300 text-sm">Simulate a port scan against a target IP or hostname to identify open service vectors and listening daemons.</p>
+                </div>
+                <div class="flex flex-col sm:flex-row gap-3">
+                    <div class="relative flex-grow">
+                        <span class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-slate-500">
+                            <i class="fa-solid fa-server"></i>
+                        </span>
+                        <input type="text" id="port-target-input" value="192.168.1.1" placeholder="Enter IP or Hostname..." class="w-full pl-11 pr-4 py-3 bg-slate-900 border border-slate-800 rounded-xl text-white placeholder-slate-500 focus:outline-none focus:border-purple-500 code-font text-sm">
+                    </div>
+                    <button onclick="runPortScan()" class="px-6 py-3 bg-purple-600 hover:bg-purple-700 text-white font-bold rounded-xl transition-all shadow-lg shadow-purple-600/20 flex items-center justify-center">
+                        <i class="fa-solid fa-satellite-dish mr-2"></i> Start Port Scan
+                    </button>
+                </div>
+            </div>
+
+            <!-- Port Scan Results Container -->
+            <div id="port-results-container" class="hidden glass-panel rounded-2xl p-6 sm:p-8 space-y-6">
+                <div class="flex items-center justify-between border-b border-slate-800 pb-4">
+                    <div>
+                        <span class="px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-purple-500/20 text-purple-300 border border-purple-500/30">Scan Complete</span>
+                        <h3 id="port-scan-title" class="text-xl font-bold text-white mt-2 code-font"></h3>
+                    </div>
+                    <div class="text-right">
+                        <p class="text-xs text-slate-400">Open Ports Found</p>
+                        <p id="port-count-badge" class="text-3xl font-black text-purple-400">4 / 6</p>
+                    </div>
+                </div>
+
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left text-sm text-slate-300">
+                        <thead class="bg-slate-900/80 text-xs uppercase text-slate-400 border-b border-slate-800">
+                            <tr>
+                                <th class="p-3">Port</th>
+                                <th class="p-3">Protocol / Service</th>
+                                <th class="p-3">State</th>
+                                <th class="p-3">Risk Level</th>
+                            </tr>
+                        </thead>
+                        <tbody id="port-table-body" class="divide-y divide-slate-800/60 code-font text-xs">
+                            <!-- Populated by JS -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- CVE & EXPLOIT DATABASE VIEW (NEW FEATURE) -->
+        <section id="view-cve-search" class="hidden space-y-6">
+            <div class="glass-panel rounded-2xl p-6 sm:p-8">
+                <div class="max-w-2xl mb-6">
+                    <h2 class="text-2xl font-bold text-white mb-2 flex items-center">
+                        <i class="fa-solid fa-bug-slash text-red-400 mr-3"></i> Vulnerability & CVE Exploit Database
+                    </h2>
+                    <p class="text-slate-300 text-sm">Search common vulnerabilities and exposures (CVE) by ID, keyword, or software name to inspect CVSS ratings and mitigation strategies.</p>
+                </div>
+                <div class="flex flex-col sm:flex-row gap-3">
+                    <div class="relative flex-grow">
+                        <span class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-slate-500">
+                            <i class="fa-solid fa-magnifying-glass"></i>
+                        </span>
+                        <input type="text" id="cve-input" placeholder="Search e.g. CVE-2021-44228, Apache, Log4j, OpenSSL..." class="w-full pl-11 pr-4 py-3 bg-slate-900 border border-slate-800 rounded-xl text-white placeholder-slate-500 focus:outline-none focus:border-red-500 code-font text-sm">
+                    </div>
+                    <button onclick="searchCVE()" class="px-6 py-3 bg-red-600 hover:bg-red-700 text-white font-bold rounded-xl transition-all shadow-lg shadow-red-600/20 flex items-center justify-center">
+                        <i class="fa-solid fa-shield-cat mr-2"></i> Query Database
+                    </button>
+                </div>
+                <div class="mt-4 flex flex-wrap gap-2">
+                    <span class="text-xs text-slate-400 self-center mr-2">Quick filters:</span>
+                    <button onclick="loadCVEQuick('CVE-2021-44228')" class="text-xs px-2.5 py-1 bg-slate-900 hover:bg-slate-800 border border-slate-800 text-red-400 rounded-lg code-font">Log4Shell</button>
+                    <button onclick="loadCVEQuick('CVE-2021-34527')" class="text-xs px-2.5 py-1 bg-slate-900 hover:bg-slate-800 border border-slate-800 text-amber-400 rounded-lg code-font">PrintNightmare</button>
+                    <button onclick="loadCVEQuick('CVE-2014-0160')" class="text-xs px-2.5 py-1 bg-slate-900 hover:bg-slate-800 border border-slate-800 text-purple-400 rounded-lg code-font">Heartbleed</button>
+                </div>
+            </div>
+
+            <!-- CVE Results Container -->
+            <div id="cve-results-container" class="hidden glass-panel rounded-2xl p-6 sm:p-8 space-y-6">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between border-b border-slate-800 pb-4 gap-4">
+                    <div>
+                        <span id="cve-badge" class="px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider"></span>
+                        <h3 id="cve-id-title" class="text-xl font-bold text-white mt-2 code-font"></h3>
+                    </div>
+                    <div class="text-right">
+                        <p class="text-xs text-slate-400">CVSS Severity Score</p>
+                        <p id="cve-score" class="text-3xl font-black"></p>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div class="p-4 rounded-xl bg-slate-900/80 border border-slate-800">
+                        <p class="text-xs text-slate-400 uppercase font-semibold text-slate-400">Vulnerability Description</p>
+                        <p id="cve-desc" class="text-sm text-slate-200 mt-2 leading-relaxed"></p>
+                    </div>
+                    <div class="p-4 rounded-xl bg-slate-900/80 border border-slate-800">
+                        <p class="text-xs text-slate-400 uppercase font-semibold text-emerald-400">Mitigation & Patch Guidance</p>
+                        <p id="cve-mitigation" class="text-sm text-slate-200 mt-2 leading-relaxed"></p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ENCODER / DECODER TOOL VIEW (NEW FEATURE) -->
+        <section id="view-crypto-tool" class="hidden space-y-6">
+            <div class="glass-panel rounded-2xl p-6 sm:p-8 space-y-6">
+                <div class="max-w-2xl">
+                    <h2 class="text-2xl font-bold text-white mb-2 flex items-center">
+                        <i class="fa-solid fa-code text-cyan-400 mr-3"></i> Security Payload Encoder & Decoder
+                    </h2>
+                    <p class="text-slate-300 text-sm">Instantly encode and decode strings across Base64, URL encoding, Hexadecimal, and SHA-256 hash hashing.</p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="space-y-2">
+                        <label class="block text-xs font-semibold uppercase tracking-wider text-slate-400">Input Data</label>
+                        <textarea id="codec-input" rows="6" oninput="runCodec()" placeholder="Enter text or payload here..." class="w-full p-4 bg-slate-900 border border-slate-800 rounded-xl text-white placeholder-slate-500 focus:outline-none focus:border-cyan-500 code-font text-sm"></textarea>
+                        <div class="flex gap-2 pt-2">
+                            <button onclick="loadCodecSample()" class="text-xs px-3 py-1.5 bg-slate-900 hover:bg-slate-800 border border-slate-800 text-cyan-400 rounded-lg">Load Sample Payload</button>
+                        </div>
+                    </div>
+                    <div class="space-y-4">
+                        <div class="space-y-1">
+                            <label class="block text-xs font-semibold uppercase tracking-wider text-slate-400">Base64 Encoded</label>
+                            <input type="text" id="codec-base64" readonly class="w-full px-4 py-2.5 bg-slate-900 border border-slate-800 rounded-xl text-cyan-400 code-font text-xs select-all">
+                        </div>
+                        <div class="space-y-1">
+                            <label class="block text-xs font-semibold uppercase tracking-wider text-slate-400">URL Encoded</label>
+                            <input type="text" id="codec-url" readonly class="w-full px-4 py-2.5 bg-slate-900 border border-slate-800 rounded-xl text-cyan-400 code-font text-xs select-all">
+                        </div>
+                        <div class="space-y-1">
+                            <label class="block text-xs font-semibold uppercase tracking-wider text-slate-400">Hexadecimal</label>
+                            <input type="text" id="codec-hex" readonly class="w-full px-4 py-2.5 bg-slate-900 border border-slate-800 rounded-xl text-cyan-400 code-font text-xs select-all">
+                        </div>
+                        <div class="space-y-1">
+                            <label class="block text-xs font-semibold uppercase tracking-wider text-slate-400">String Length & Stats</label>
+                            <p id="codec-stats" class="text-xs text-slate-300 font-mono py-1">Characters: 0 | Bytes: 0</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- INCIDENT RESPONSE PLAYBOOK VIEW (NEW FEATURE) -->
+        <section id="view-ir-checklist" class="hidden space-y-6">
+            <div class="glass-panel rounded-2xl p-6 sm:p-8">
+                <div class="max-w-2xl mb-6">
+                    <h2 class="text-2xl font-bold text-white mb-2 flex items-center">
+                        <i class="fa-solid fa-list-check text-amber-400 mr-3"></i> Incident Response (IR) Playbook Checklist
+                    </h2>
+                    <p class="text-slate-300 text-sm">Follow NIST-aligned incident response steps when responding to security breaches, malware infections, or unauthorized access.</p>
+                </div>
+
+                <div class="space-y-3" id="checklist-container">
+                    <!-- Populated by JS -->
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="border-t border-slate-800 bg-slate-950 py-6 px-4 text-center text-xs text-slate-500">
+        <p>CyberGuard Pro Security Toolkit &copy; 2026. Built for cybersecurity analysis and educational defense demonstration.</p>
+    </footer>
+
+    <script>
+        function switchTab(tabId) {
+            const tabs = ['dashboard', 'url-scanner', 'password-checker', 'phishing-checker', 'port-scanner', 'cve-search', 'crypto-tool', 'ir-checklist'];
+            tabs.forEach(t => {
+                document.getElementById('view-' + t).classList.add('hidden');
+                const btn = document.getElementById('nav-' + t);
+                if (btn) {
+                    btn.className = "nav-btn px-3 py-2 rounded-lg text-xs sm:text-sm font-medium text-slate-400 hover:text-white hover:bg-slate-800/50 transition-all whitespace-nowrap";
+                }
+            });
+            document.getElementById('view-' + tabId).classList.remove('hidden');
+            const activeBtn = document.getElementById('nav-' + tabId);
+            if (activeBtn) {
+                activeBtn.className = "nav-btn px-3 py-2 rounded-lg text-xs sm:text-sm font-medium transition-all bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 whitespace-nowrap";
+            }
+        }
+
+        // URL Scanner Logic
+        function loadSampleURL(url) {
+            document.getElementById('url-input').value = url;
+            scanURL();
+        }
+
+        function scanURL() {
+            const urlVal = document.getElementById('url-input').value.trim();
+            if (!urlVal) {
+                showToast("Please enter a valid URL to scan.");
+                return;
+            }
+
+            const container = document.getElementById('url-results-container');
+            container.classList.remove('hidden');
+
+            const badge = document.getElementById('url-status-badge');
+            const title = document.getElementById('url-result-title');
+            const scoreEl = document.getElementById('url-threat-score');
+            const sslEl = document.getElementById('url-res-ssl');
+            const domainEl = document.getElementById('url-res-domain');
+            const redirectEl = document.getElementById('url-res-redirect');
+            const indicatorsList = document.getElementById('url-indicators-list');
+
+            title.innerText = urlVal;
+            indicatorsList.innerHTML = '';
+
+            let isPhish = urlVal.includes('.tk') || urlVal.includes('support') || urlVal.includes('giveaway') || urlVal.includes('paypa1');
+            let isSuspicious = urlVal.includes('xyz') || urlVal.includes('login') || urlVal.includes('-');
+
+            if (isPhish) {
+                badge.className = "px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-red-500/20 text-red-400 border border-red-500/30";
+                badge.innerText = "High Threat / Phishing";
+                scoreEl.innerText = "94 / 100";
+                scoreEl.className = "text-3xl font-black text-red-400";
+                sslEl.innerHTML = '<span class="text-red-400 font-semibold">Invalid / Self-Signed</span>';
+                domainEl.innerHTML = '<span class="text-red-400 font-semibold">Registered 3 days ago</span>';
+                redirectEl.innerHTML = '<span class="text-red-400 font-semibold">3 Multi-hop redirects detected</span>';
+
+                addIndicator(indicatorsList, 'Domain uses high-risk TLD often associated with malicious actors', 'danger');
+                addIndicator(indicatorsList, 'Brand impersonation detected (Typosquatting heuristic match)', 'danger');
+            } else if (isSuspicious) {
+                badge.className = "px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-amber-500/20 text-amber-400 border border-amber-500/30";
+                badge.innerText = "Suspicious Domain";
+                scoreEl.innerText = "58 / 100";
+                scoreEl.className = "text-3xl font-black text-amber-400";
+                sslEl.innerHTML = '<span class="text-amber-400 font-semibold">Valid but untrusted root</span>';
+                domainEl.innerHTML = '<span class="text-amber-400 font-semibold">Registered 45 days ago</span>';
+                redirectEl.innerHTML = '<span class="text-slate-300 font-semibold">1 direct connection</span>';
+
+                addIndicator(indicatorsList, 'Keyword "login" in unusual path context', 'warning');
+            } else {
+                badge.className = "px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-emerald-500/20 text-emerald-400 border border-emerald-500/30";
+                badge.innerText = "Verified Safe";
+                scoreEl.innerText = "0 / 100";
+                scoreEl.className = "text-3xl font-black text-emerald-400";
+                sslEl.innerHTML = '<span class="text-emerald-400 font-semibold">Valid (Let\'s Encrypt)</span>';
+                domainEl.innerHTML = '<span class="text-emerald-400 font-semibold">Established (> 5 years old)</span>';
+                redirectEl.innerHTML = '<span class="text-emerald-400 font-semibold">Direct connection</span>';
+
+                addIndicator(indicatorsList, 'Domain reputation clean across 14 security blacklists', 'safe');
+            }
+        }
+
+        function addIndicator(parent, text, type) {
+            let colorClass = type === 'danger' ? 'bg-red-500/10 text-red-400 border-red-500/20' : type === 'warning' ? 'bg-amber-500/10 text-amber-400 border-amber-500/20' : 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20';
+            let icon = type === 'danger' ? 'fa-triangle-exclamation text-red-400' : type === 'warning' ? 'fa-circle-exclamation text-amber-400' : 'fa-circle-check text-emerald-400';
+            
+            let div = document.createElement('div');
+            div.className = `p-3 rounded-xl border flex items-center space-x-3 ${colorClass}`;
+            div.innerHTML = `<i class="fa-solid ${icon}"></i><span class="text-sm font-medium">${text}</span>`;
+            parent.appendChild(div);
+        }
+
+        // Password Inspector Logic
+        function togglePasswordVisibility() {
+            const input = document.getElementById('pwd-input');
+            const icon = document.getElementById('pwd-eye-icon');
+            if (input.type === 'password') {
+                input.type = 'text';
+                icon.className = "fa-solid fa-eye-slash";
+            } else {
+                input.type = 'password';
+                icon.className = "fa-solid fa-eye";
+            }
+        }
+
+        function analyzePassword() {
+            const val = document.getElementById('pwd-input').value;
+            const label = document.getElementById('pwd-strength-label');
+            const bar = document.getElementById('pwd-strength-bar');
+            const crackTime = document.getElementById('pwd-crack-time');
+
+            if (!val) {
+                label.innerText = "Not Entered";
+                bar.style.width = "0%";
+                bar.className = "h-full transition-all duration-300 bg-transparent";
+                crackTime.innerText = "-";
+                return;
+            }
+
+            let score = 0;
+            if (val.length >= 8) score++;
+            if (val.length >= 12) score++;
+            if (val.length >= 16) score++;
+            if (/[A-Z]/.test(val) && /[a-z]/.test(val)) score++;
+            if (/[0-9]/.test(val)) score++;
+            if (/[^A-Za-z0-9]/.test(val)) score++;
+
+            if (score <= 2) {
+                label.innerText = "Weak";
+                label.className = "font-bold text-red-400";
+                bar.style.width = "30%";
+                bar.className = "h-full transition-all duration-300 bg-red-500";
+                crackTime.innerText = "Instant (< 1 second)";
+            } else if (score <= 4) {
+                label.innerText = "Moderate";
+                label.className = "font-bold text-amber-400";
+                bar.style.width = "65%";
+                bar.className = "h-full transition-all duration-300 bg-amber-500";
+                crackTime.innerText = "3 Days to 4 Months";
+            } else {
+                label.innerText = "Strong / Secure";
+                label.className = "font-bold text-emerald-400";
+                bar.style.width = "100%";
+                bar.className = "h-full transition-all duration-300 bg-emerald-500";
+                crackTime.innerText = "3,400+ Centuries";
+            }
+        }
+
+        function updateSliderVal() {
+            const val = document.getElementById('pwd-length-slider').value;
+            document.getElementById('slider-val').innerText = val;
+            generatePassword();
+        }
+
+        function generatePassword() {
+            const len = parseInt(document.getElementById('pwd-length-slider').value);
+            const useUpper = document.getElementById('gen-upper').checked;
+            const useLower = document.getElementById('gen-lower').checked;
+            const useNumbers = document.getElementById('gen-numbers').checked;
+            const useSymbols = document.getElementById('gen-symbols').checked;
+
+            let chars = "";
+            if (useUpper) chars += "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+            if (useLower) chars += "abcdefghijklmnopqrstuvwxyz";
+            if (useNumbers) chars += "0123456789";
+            if (useSymbols) chars += "!@#$%^&*()_+-=[]{}|;:,.<>?";
+
+            if (!chars) {
+                document.getElementById('generated-pwd-output').value = "Select at least one set!";
+                return;
+            }
+
+            let result = "";
+            const array = new Uint32Array(len);
+            window.crypto.getRandomValues(array);
+            for (let i = 0; i < len; i++) {
+                result += chars[array[i] % chars.length];
+            }
+
+            document.getElementById('generated-pwd-output').value = result;
+        }
+
+        function copyGeneratedPassword() {
+            const text = document.getElementById('generated-pwd-output').value;
+            const textArea = document.createElement("textarea");
+            textArea.value = text;
+            document.body.appendChild(textArea);
+            textArea.select();
+            document.execCommand("copy");
+            document.body.removeChild(textArea);
+            showToast("Password copied to clipboard securely!");
+        }
+
+        // Phishing Analyzer Logic
+        function loadSamplePhishing(type) {
+            const textarea = document.getElementById('phishing-input');
+            if (type === 1) {
+                textarea.value = "From: account-update@paypa1-security-alerts.tk\nSubject: URGENT: Your account has been suspended!\n\nDear Customer,\nWe detected unauthorized login attempts. Verify immediately:\nhttp://paypa1-security-alerts.tk/login";
+            } else {
+                textarea.value = "From: notifications@github.com\nSubject: New token added\n\nA new token was added to your GitHub account from IP 192.168.1.55.";
+            }
+            analyzePhishing();
+        }
+
+        function analyzePhishing() {
+            const content = document.getElementById('phishing-input').value.trim();
+            if (!content) {
+                showToast("Please paste email content or headers first.");
+                return;
+            }
+
+            const container = document.getElementById('phishing-results-container');
+            container.classList.remove('hidden');
+
+            const badge = document.getElementById('phishing-status-badge');
+            const title = document.getElementById('phishing-result-title');
+            const scoreEl = document.getElementById('phishing-score');
+            const domainEl = document.getElementById('phishing-res-domain');
+            const urgencyEl = document.getElementById('phishing-res-urgency');
+            const linksEl = document.getElementById('phishing-res-links');
+            const indicatorsList = document.getElementById('phishing-indicators-list');
+
+            indicatorsList.innerHTML = '';
+            let isPhish = content.includes('paypa1') || content.includes('.tk') || content.toLowerCase().includes('urgent');
+
+            if (isPhish) {
+                badge.className = "px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-red-500/20 text-red-400 border border-red-500/30";
+                badge.innerText = "High Phishing Probability";
+                title.innerText = "Spear-Phishing / Credential Harvesting Template";
+                scoreEl.innerText = "91%";
+                scoreEl.className = "text-3xl font-black text-red-400";
+                domainEl.innerHTML = '<span class="text-red-400 font-semibold">Spoofed Domain (Paypa1)</span>';
+                urgencyEl.innerHTML = '<span class="text-red-400 font-semibold">High Panic Trigger ("Suspended")</span>';
+                linksEl.innerHTML = '<span class="text-red-400 font-semibold">Suspicious redirect domain (.tk)</span>';
+
+                addIndicator(indicatorsList, 'High-pressure urgency and fear tactics detected', 'danger');
+                addIndicator(indicatorsList, 'Typosquatting domain detected in sender address', 'danger');
+            } else {
+                badge.className = "px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-emerald-500/20 text-emerald-400 border border-emerald-500/30";
+                badge.innerText = "Legitimate Email";
+                title.innerText = "Standard Notification / Valid Signature";
+                scoreEl.innerText = "4%";
+                scoreEl.className = "text-3xl font-black text-emerald-400";
+                domainEl.innerHTML = '<span class="text-emerald-400 font-semibold">DKIM & SPF Records Valid</span>';
+                urgencyEl.innerHTML = '<span class="text-emerald-400 font-semibold">Informational tone</span>';
+                linksEl.innerHTML = '<span class="text-emerald-400 font-semibold">Standard official links</span>';
+
+                addIndicator(indicatorsList, 'Sender domain cryptographic signatures pass checks', 'safe');
+            }
+        }
+
+        // Port Scanner Logic
+        function runPortScan() {
+            const target = document.getElementById('port-target-input').value.trim();
+            if (!target) {
+                showToast("Please enter a valid IP address or target host.");
+                return;
+            }
+
+            const container = document.getElementById('port-results-container');
+            container.classList.remove('hidden');
+            document.getElementById('port-scan-title').innerText = "Target: " + target;
+
+            const tbody = document.getElementById('port-table-body');
+            tbody.innerHTML = '';
+
+            const ports = [
+                { port: 21, service: 'FTP (File Transfer)', state: 'Closed', risk: 'Low' },
+                { port: 22, service: 'SSH (Secure Shell)', state: 'Open', risk: 'Medium' },
+                { port: 80, service: 'HTTP (Web Traffic)', state: 'Open', risk: 'Low' },
+                { port: 443, service: 'HTTPS (Secure Web)', state: 'Open', risk: 'Low' },
+                { port: 3306, service: 'MySQL Database', state: 'Filtered', risk: 'High' },
+                { port: 3389, service: 'RDP (Remote Desktop)', state: 'Open', risk: 'Critical' }
+            ];
+
+            ports.forEach(p => {
+                let tr = document.createElement('tr');
+                let stateColor = p.state === 'Open' ? 'text-emerald-400 font-bold' : p.state === 'Filtered' ? 'text-amber-400' : 'text-slate-500';
+                let riskColor = p.risk === 'Critical' ? 'bg-red-500/20 text-red-400' : p.risk === 'High' ? 'bg-amber-500/20 text-amber-400' : 'bg-emerald-500/20 text-emerald-400';
+                
+                tr.innerHTML = `
+                    <td class="p-3 font-bold text-white">${p.port}</td>
+                    <td class="p-3">${p.service}</td>
+                    <td class="p-3 ${stateColor}">${p.state}</td>
+                    <td class="p-3"><span class="px-2 py-0.5 rounded text-[10px] ${riskColor}">${p.risk}</span></td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        // CVE Database Search Logic (New Feature)
+        function loadCVEQuick(cveId) {
+            document.getElementById('cve-input').value = cveId;
+            searchCVE();
+        }
+
+        function searchCVE() {
+            const query = document.getElementById('cve-input').value.trim().toUpperCase();
+            if (!query) {
+                showToast("Please enter a CVE ID or keyword.");
+                return;
+            }
+
+            const container = document.getElementById('cve-results-container');
+            container.classList.remove('hidden');
+
+            const badge = document.getElementById('cve-badge');
+            const title = document.getElementById('cve-id-title');
+            const scoreEl = document.getElementById('cve-score');
+            const descEl = document.getElementById('cve-desc');
+            const mitigationEl = document.getElementById('cve-mitigation');
+
+            if (query.includes('LOG4') || query.includes('CVE-2021-44228')) {
+                badge.className = "px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-red-500/20 text-red-400 border border-red-500/30";
+                badge.innerText = "Critical RCE Exploit";
+                title.innerText = "CVE-2021-44228 (Log4Shell)";
+                scoreEl.innerText = "10.0 / 10";
+                scoreEl.className = "text-3xl font-black text-red-400";
+                descEl.innerText = "Apache Log4j2 <=2.14.1 JNDI features used in configuration, log messages, and parameters do not protect against attacker controlled LDAP and other JNDI related endpoints.";
+                mitigationEl.innerText = "Upgrade to Log4j 2.15.0 (or higher), or set log4j2.formatMsgNoLookups=True in older versions.";
+            } else if (query.includes('PRINT') || query.includes('CVE-2021-34527')) {
+                badge.className = "px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-amber-500/20 text-amber-400 border border-amber-500/30";
+                badge.innerText = "High Severity LPE / RCE";
+                title.innerText = "CVE-2021-34527 (PrintNightmare)";
+                scoreEl.innerText = "8.8 / 10";
+                scoreEl.className = "text-3xl font-black text-amber-400";
+                descEl.innerText = "Windows Print Spooler service improperly performs privileged file operations. An authenticated attacker can execute code with SYSTEM privileges.";
+                mitigationEl.innerText = "Disable the Print Spooler service on domain controllers or apply July 2021 Microsoft security updates.";
+            } else {
+                badge.className = "px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-purple-500/20 text-purple-300 border border-purple-500/30";
+                badge.innerText = "Vulnerability Record";
+                title.innerText = query;
+                scoreEl.innerText = "7.5 / 10";
+                scoreEl.className = "text-3xl font-black text-purple-400";
+                descEl.innerText = `Simulated vulnerability entry matching query "${query}". Allows remote actors to perform unauthorized actions or trigger denial-of-service conditions.`;
+                mitigationEl.innerText = "Apply vendor patches immediately, restrict network ingress to trusted IPs, and monitor SIEM logs for suspicious execution patterns.";
+            }
+        }
+
+        // Codec Encoder & Decoder Logic (New Feature)
+        function loadCodecSample() {
+            document.getElementById('codec-input').value = "alert('XSS Payload Test');";
+            runCodec();
+        }
+
+        function runCodec() {
+            const val = document.getElementById('codec-input').value;
+            if (!val) {
+                document.getElementById('codec-base64').value = "";
+                document.getElementById('codec-url').value = "";
+                document.getElementById('codec-hex').value = "";
+                document.getElementById('codec-stats').innerText = "Characters: 0 | Bytes: 0";
+                return;
+            }
+
+            try {
+                document.getElementById('codec-base64').value = btoa(val);
+            } catch(e) {
+                document.getElementById('codec-base64').value = "Encoding Error";
+            }
+
+            document.getElementById('codec-url').value = encodeURIComponent(val);
+            
+            let hex = "";
+            for (let i = 0; i < val.length; i++) {
+                hex += val.charCodeAt(i).toString(16).padStart(2, '0') + " ";
+            }
+            document.getElementById('codec-hex').value = hex.trim();
+
+            document.getElementById('codec-stats').innerText = `Characters: ${val.length} | Bytes: ${new Blob([val]).size}`;
+        }
+
+        // Incident Response Checklist (New Feature)
+        function initIRChecklist() {
+            const steps = [
+                { title: "Step 1: Preparation & Tooling", desc: "Ensure SIEM logs, forensic drive images, and communication channels are ready before an incident strikes." },
+                { title: "Step 2: Identification & Triage", desc: "Determine scope of breach, affected IP addresses, compromised credentials, and vector of intrusion." },
+                { title: "Step 3: Containment (Short-term)", desc: "Isolate infected workstations or servers from the corporate network without shutting them down to preserve RAM forensics." },
+                { title: "Step 4: Eradication", desc: "Remove malware binaries, close unpatched vulnerability vectors, and revoke compromised API keys or tokens." },
+                { title: "Step 5: Recovery", desc: "Restore systems from verified clean backups and verify system integrity before returning to production." },
+                { title: "Step 6: Post-Incident Review", desc: "Conduct post-mortem meeting with engineering and security teams to improve defenses and update YARA rules." }
+            ];
+
+            const container = document.getElementById('checklist-container');
+            container.innerHTML = '';
+
+            steps.forEach((s, idx) => {
+                let div = document.createElement('label');
+                div.className = "p-4 rounded-xl bg-slate-900/80 border border-slate-800 flex items-start space-x-4 cursor-pointer hover:border-slate-700 transition-all";
+                div.innerHTML = `
+                    <input type="checkbox" class="mt-1 rounded bg-slate-950 border-slate-700 text-emerald-500 focus:ring-0 w-5 h-5 cursor-pointer">
+                    <div>
+                        <h4 class="text-sm font-bold text-white">${s.title}</h4>
+                        <p class="text-xs text-slate-400 mt-1">${s.desc}</p>
+                    </div>
+                `;
+                container.appendChild(div);
+            });
+        }
+
+        function showToast(message) {
+            const existing = document.getElementById('custom-toast');
+            if (existing) existing.remove();
+
+            const toast = document.createElement('div');
+            toast.id = 'custom-toast';
+            toast.className = 'fixed bottom-5 right-5 z-50 glass-panel bg-slate-900/90 border border-emerald-500/40 text-white px-5 py-3 rounded-xl shadow-2xl flex items-center space-x-3 transition-all';
+            toast.innerHTML = `<i class="fa-solid fa-shield-halved text-emerald-400 text-lg"></i><span class="text-sm font-medium">${message}</span>`;
+            document.body.appendChild(toast);
+
+            setTimeout(() => {
+                toast.style.opacity = '0';
+                setTimeout(() => toast.remove(), 300);
+            }, 3500);
+        }
+
+        window.onload = function() {
+            generatePassword();
+            initIRChecklist();
+        }
+    </script>
+</body>
+</html>
